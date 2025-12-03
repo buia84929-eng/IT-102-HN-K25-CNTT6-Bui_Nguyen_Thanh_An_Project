@@ -2,7 +2,7 @@
 #include<string.h>
 #define MAX_BOOKS 100
 #define MAX_BORROWS 100
-#define ITEMS_PER_PAGE 2
+#define ITEMS_PER_PAGE 5 
 
 struct Date{
     int day;
@@ -39,6 +39,7 @@ int isLeapYear(int year){
     }
     return 0;
 }
+//so ngay trong thang 
 int getDaysInMonth(int month, int year){
     if(month == 2){
         return isLeapYear(year) ? 29 : 28;
@@ -51,7 +52,7 @@ int getDaysInMonth(int month, int year){
     }
     return 0;
 }
-
+//tim sach theo ID 
 int findBookIndexById(int id){
     for (int i = 0; i < bookCount; i++){
         if(books[i].bookId == id){
@@ -60,7 +61,7 @@ int findBookIndexById(int id){
     }
     return -1;
 }
-
+ //tim phieu muon theo ID 
 int findBorrowIndexById(int id){
     for(int i = 0; i < borrowCount; i++){
         if (borrows[i].borrowId == id){
@@ -131,7 +132,7 @@ int hasDigit(const char *s){
     }
     return 0;
 } 
-
+ //chuyen chuoi sang chu thuong 
 void strToLower(char *dest,const char *src){
 	int i = 0;
 	while(src[i]){
@@ -146,11 +147,11 @@ void strToLower(char *dest,const char *src){
 }
 
 void addBook(){
-    if (bookCount >= MAX_BOOKS){
+    if (bookCount >= MAX_BOOKS){ 
         printf("Danh sach da day, khong the them moi\n");
         return;
     } 
-
+//kiem tra mang 
     struct Book newBook;
     newBook.bookId = nextBookId++; // gan
     printf("\n======= Them moi sach =====\n");
@@ -158,7 +159,7 @@ void addBook(){
 
     while(1){
         getStringInput("Nhap tieu de sach (title): ", newBook.title, sizeof(newBook.title));
-        if (isTitleUnique(newBook.title, 0)){
+        if (isTitleUnique(newBook.title, 0)){ 
             break;
         }
         printf("Loi: Tieu de sach da ton tai. Nhap lai.\n");
@@ -221,9 +222,9 @@ void displayBooks(){
     int total_page;
     int kq = bookCount / ITEMS_PER_PAGE;
     
-    total_page = (bookCount % ITEMS_PER_PAGE == 0) ? kq : kq + 1;
+    total_page = (bookCount % ITEMS_PER_PAGE == 0) ? kq : kq + 1; 
     while(1){
-        int start = (page -1) * ITEMS_PER_PAGE;
+        int start = (page -1) * ITEMS_PER_PAGE; 
         int end = start + ITEMS_PER_PAGE;
         
         printf("\n======== Trang %d/%d ========\n", page, total_page);
@@ -434,11 +435,12 @@ void displayBorrowSlips(){
 		printf("Danh sach phieu muon trong\n");
 		return;
 	}
-	const int ITEMS =10;
-	int page = 1;
-	int totalPage = (borrowCount % ITEMS ==0) ? (borrowCount / ITEMS) : (borrowCount / ITEMS + 1);
+	const int ITEMS = 5;   
+	int page = 1;// trang hien tai
+	//tong so trang dua vao so luong sach va so phan tu  
 	while(1){
-		int start = (page -1) *ITEMS;
+	int totalPage = (borrowCount % ITEMS ==0) ? (borrowCount / ITEMS) : (borrowCount / ITEMS + 1); 
+		int start = (page -1) *ITEMS; 
 		int end = start + ITEMS;
 		printf("\n========= Trang %d / %d =========\n", page, totalPage);
         printf("+--------+--------+------------+------------+------------------------------+-----------+\n");
@@ -462,7 +464,7 @@ void displayBorrowSlips(){
 		}
 		 printf("+--------+--------+------------+------------+------------------------------+-----------+\n");
 		 printf("1.Trang truoc\n");
-		 printf("2.Quya lai menu\n");
+		 printf("2.Quay lai menu\n");
 		 printf("3.Trang sau\n");
 		 
 		 int choice = getIntInput("Nhap lua chon (1-3): ",1,3);
@@ -478,42 +480,84 @@ void displayBorrowSlips(){
 	}
 }
 
-void initSampleData(){ // them sach
-	struct Book b1 = {nextBookId++, "Tho","Thanh An",2022,55};
-	struct Book b2 = {nextBookId++,"Cao","Thu cuc",2005,25};
-	struct Book b3 = {nextBookId++,"Rai ca","abc",2003,15};
-	
-	books[bookCount++] = b1;
-	books[bookCount++] = b2;
-	books[bookCount++] = b3;
-	
-	struct Borrow br1 ={nextBorrowId++,b1.bookId,{05,11,2024},{0,0,0},"Cuc xinh dep",1};
-	struct Borrow br2 ={nextBorrowId++,b2.bookId,{05,12,2021},{5,1,2022},"Cuc rai ca",0};
-	
-	borrows[borrowCount++] = br1;
-	borrows[borrowCount++] = br2;
-	//giam so luong sach neu dg co ng muon
-	if(br1.status == 1){
-		int index = findBookIndexById(br1.bookId);
-		books[index].quantity--;
-	}
-	};
+void initSampleData() { 
+    struct Book b1 = {nextBookId++, "Tho", "Thanh An", 2022, 55};
+    struct Book b2 = {nextBookId++, "Cao", "Thu Cuc", 2005, 25};
+    struct Book b3 = {nextBookId++, "Rai ca", "Su", 2003, 15};
+    struct Book b4 = {nextBookId++, "Disney", "Mck", 2000, 45};
+    struct Book b5 = {nextBookId++, "Lo lem", "Mai Hoa", 2024, 14};
+    struct Book b6 = {nextBookId++, "Harry Potter", "J.K. Rowling", 2001, 30};
+    struct Book b7 = {nextBookId++, "Chien binh", "Nguyen Van A", 2010, 20};
+    struct Book b8 = {nextBookId++, "Doraemon", "Fujiko F. Fujio", 1995, 40};
+    struct Book b9 = {nextBookId++, "Toi thay hoa vang tren co xanh", "Nguyen Nhat Anh", 1988, 10};
+    struct Book b10 = {nextBookId++, "Mat biec", "Nguyen Nhat Anh", 1992, 18};
+    struct Book b11 = {nextBookId++, "Tam Cam", "Truyen Co Tich", 2005, 25};
+    struct Book b12 = {nextBookId++, "The Alchemist", "Paulo Coelho", 1988, 12};
+    struct Book b13 = {nextBookId++, "Nhung dua tre ngoan", "Pham Thi Hien", 2015, 22};
+    struct Book b14 = {nextBookId++, "Cho toi xin mot ve di tuoi tho", "Nguyen Nhat Anh", 2010, 28};
+    struct Book b15 = {nextBookId++, "Tuoi tre noi loan", "Nguyen Hoang", 2018, 16};
+    struct Book b16 = {nextBookId++, "Truyen Ki Niem", "Tran Van B", 2002, 14};
+    struct Book b17 = {nextBookId++, "Song Trong Ngay", "Le Thi C", 2021, 19};
+    struct Book b18 = {nextBookId++, "Lua Chon", "Nguyen Ngoc D", 2019, 17};
 
+    books[bookCount++] = b1;
+    books[bookCount++] = b2;
+    books[bookCount++] = b3;
+    books[bookCount++] = b4;
+    books[bookCount++] = b5;
+    books[bookCount++] = b6;
+    books[bookCount++] = b7;
+    books[bookCount++] = b8;
+    books[bookCount++] = b9;
+    books[bookCount++] = b10;
+    books[bookCount++] = b11;
+    books[bookCount++] = b12;
+    books[bookCount++] = b13;
+    books[bookCount++] = b14;
+    books[bookCount++] = b15;
+    books[bookCount++] = b16;
+    books[bookCount++] = b17;
+    books[bookCount++] = b18;
+
+    struct Borrow br1 = {nextBorrowId++, b1.bookId, {5, 11, 2024}, {0, 0, 0}, "Cuc xinh dep", 1};
+    struct Borrow br2 = {nextBorrowId++, b2.bookId, {5, 12, 2021}, {5, 1, 2022}, "Cuc rai ca", 0};
+    struct Borrow br3 = {nextBorrowId++, b6.bookId, {10, 2, 2024}, {20, 2, 2024}, "Lan Anh", 0};
+    struct Borrow br4 = {nextBorrowId++, b8.bookId, {1, 6, 2023}, {0, 0, 0}, "Minh Tu", 1};
+    struct Borrow br5 = {nextBorrowId++, b9.bookId, {15, 3, 2022}, {30, 3, 2022}, "Hieu Nguyen", 0};
+
+    borrows[borrowCount++] = br1;
+    borrows[borrowCount++] = br2;
+    borrows[borrowCount++] = br3;
+    borrows[borrowCount++] = br4;
+    borrows[borrowCount++] = br5;
+
+    for(int i = 0; i < borrowCount; i++){
+        if(borrows[i].status == 1){
+            int index = findBookIndexById(borrows[i].bookId);
+            if(index != -1){
+                books[index].quantity--;
+            }
+        }
+    }
+}
 
 int main(){
 	initSampleData(); // them du lieu mau 
     int choice;
     do{
-        printf("\n============ MENU =================\n");
-        printf("|1. Them moi sach                  |\n");
-        printf("|2. Cap nhat thong tin sach        |\n");
-        printf("|3. Hien thi danh sach             |\n");
-        printf("|4. Xoa thong tin sach             |\n");
-        printf("|5. Tim kiem sach                  |\n");
-        printf("|6. Them moi phieu muon            |\n");
-        printf("|7. Tra sach                       |\n");
-        printf("|8. Hien thi danh sach phieu muon  |\n");
-        printf("|0. Thoat                          |\n");
+        printf("|======================================================|");
+        printf("\n|                      MENU                            |\n");
+        printf("|======================================================|\n");
+        printf("|1. Them moi sach                                      |\n");
+        printf("|2. Cap nhat thong tin sach                            |\n");
+        printf("|3. Hien thi danh sach (co phan trang)                 |\n");
+        printf("|4. Xoa thong tin sach                                 |\n");
+        printf("|5. Tim kiem sach                                      |\n");
+        printf("|6. Them moi phieu muon                                |\n");
+        printf("|7. Tra sach                                           |\n");
+        printf("|8. Hien thi danh sach phieu muon (co phan trang)      |\n");
+        printf("|0. Thoat                                              |\n");
+        printf("|======================================================|\n");
         choice = getIntInput("Nhap lua chon: ", 0,9);
         switch(choice){
             case 1: addBook(); break;
